@@ -274,17 +274,57 @@ if(favFeatured){
   });
 }
 
-// header nav handlers (friendly)
+// NAV: support Home, Movies, TV Shows, Top Rated
+async function mapTvToMovieLike(tv) {
+  return {
+    id: tv.id,
+    title: tv.name || tv.original_name || "Untitled",
+    poster_path: tv.poster_path,
+    backdrop_path: tv.backdrop_path,
+    overview: tv.overview || "",
+    release_date: tv.first_air_date || ""
+  };
+}
+
+async function handleNavClick(text) {
+  text = (text || "").trim().toLowerCase();
+  if (text === "home") {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+  if (text === "movies") {
+    window.scrollTo({ top: 600, behavior: "smooth" });
+    return;
+  }
+  if (text === "top rated") {
+    window.scrollTo({ top: 1200, behavior: "smooth" });
+    return;
+  }
+  if (text === "tv shows" || text === "tv") {
+    try {
+      showLoadingGrid();
+      const tvData = await tmdb("/trending/tv/week");
+      const tvList = (tvData && tvData.results) ? tvData.results : [];
+      const mapped = await Promise.all(tvList.map(mapTvToMovieLike));
+      renderGrid(mapped);
+      if (mapped.length) await setHeroMovie(mapped[0]);
+      window.scrollTo({ top: 320, behavior: "smooth" });
+    } catch (err) {
+      console.error("Error loading TV shows", err);
+      alert("Could not load TV shows. Check console.");
+    }
+    return;
+  }
+  alert(`Nav: ${text}`);
+}
+
 document.querySelectorAll("header nav a").forEach(a => {
   a.addEventListener("click", (e) => {
     e.preventDefault();
-    const text = (a.textContent || "").trim().toLowerCase();
-    if(text === "home") window.scrollTo({ top:0, behavior:"smooth" });
-    else if(text === "movies") window.scrollTo({ top: 600, behavior:"smooth" });
-    else if(text === "top rated") window.scrollTo({ top: 1200, behavior:"smooth" });
-    else alert(`Nav: ${a.textContent}`);
+    handleNavClick(a.textContent);
   });
 });
+
 
 // search debounce
 let searchTimer;
