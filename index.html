@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MovieScope — Stream UI</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-neutral-900 text-slate-100 font-inter">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-gradient-to-b from-neutral-900/80 to-transparent backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
+          <div class="h-9 w-9 bg-red-600 rounded-sm flex items-center justify-center font-bold text-lg">MS</div>
+          <span class="font-semibold text-lg">MovieScope</span>
+        </div>
+
+        <nav class="hidden md:flex gap-4 ml-6 text-sm text-slate-300">
+          <a class="hover:text-white" href="#">Home</a>
+          <a class="hover:text-white" href="#">Movies</a>
+          <a class="hover:text-white" href="#">TV Shows</a>
+          <a class="hover:text-white" href="#">Top Rated</a>
+        </nav>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center bg-neutral-800/40 rounded-md px-3 py-1 gap-2">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input id="headerSearch" class="bg-transparent outline-none text-sm text-slate-100 w-56" placeholder="Search movies, actors, genres..." />
+        </div>
+
+        <button id="watchlistBtn" class="bg-red-600 hover:bg-red-700 px-3 py-1.5 rounded text-sm font-medium">Watchlist</button>
+        <div class="h-8 w-8 bg-neutral-700 rounded-full"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero / Featured -->
+  <section id="hero" class="relative">
+    <div id="heroBg" class="hero-bg h-[420px] bg-cover bg-center"></div>
+    <!-- overlay gradient for readable text -->
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/55 to-transparent pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-40 relative z-20">
+      <div class="bg-transparent rounded-xl p-6 md:p-8 flex flex-col md:flex-row items-start gap-6">
+        <img id="featuredPoster" src="https://via.placeholder.com/220x330/222/fff?text=Poster" alt="poster" class="w-36 md:w-44 rounded-xl shadow-2xl" />
+        <div class="flex-1 text-left">
+          <h1 id="featuredTitle" class="text-3xl md:text-4xl font-extrabold tracking-tight">Featured Movie Title</h1>
+          <div id="featuredMeta" class="text-sm text-slate-300 mt-2">Year • Genre • Runtime • ★ Rating</div>
+          <p id="featuredOverview" class="text-sm text-slate-200 mt-4 max-w-3xl leading-relaxed">Short description of the featured movie goes here. This text is purposely longer so you can read a full summary like real streaming sites.</p>
+
+          <div class="mt-5 flex gap-3">
+            <button id="playBtn" class="bg-white text-neutral-900 px-4 py-2 rounded font-semibold hover:brightness-95">Play</button>
+            <button id="favFeatured" class="border border-slate-600 px-4 py-2 rounded text-sm">+ Watchlist</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main content: rows -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10 space-y-12 pb-24">
+
+    <!-- Search results / dynamic -->
+    <section>
+      <h2 class="text-lg font-semibold mb-4">Search Results</h2>
+      <div id="searchResults" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6"></div>
+    </section>
+
+    <!-- Trending row -->
+    <section>
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-semibold">Trending Now</h2>
+        <button id="trendingMore" class="text-sm text-slate-400 hover:text-white">See all</button>
+      </div>
+      <div id="trendingRow" class="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4"></div>
+    </section>
+
+    <!-- Top Rated row -->
+    <section>
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-lg font-semibold">Top Rated</h2>
+        <button id="topRatedMore" class="text-sm text-slate-400 hover:text-white">See all</button>
+      </div>
+      <div id="topRatedRow" class="flex gap-4 overflow-x-auto pb-2 -mx-4 px-4"></div>
+    </section>
+
+    <!-- Categories (chips) -->
+    <section>
+      <h2 class="text-lg font-semibold mb-3">Browse by Genre</h2>
+      <div id="genreChips" class="flex gap-2 flex-wrap"></div>
+    </section>
+
+  </main>
+
+  <!-- Modal root -->
+  <div id="modalRoot"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
