@@ -300,7 +300,14 @@ if(favFeatured){
   });
 }
 
-// NAV: support Home, Movies, TV Shows, Top Rated
+// NAV: improved element-based scrolling + TV shows support
+function scrollToEl(el, offset = 80) {
+  if(!el) { window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+  const rect = el.getBoundingClientRect();
+  const top = window.scrollY + rect.top - offset;
+  window.scrollTo({ top: Math.max(0, Math.round(top)), behavior: "smooth" });
+}
+
 async function mapTvToMovieLike(tv) {
   return {
     id: tv.id,
@@ -316,15 +323,18 @@ async function mapTvToMovieLike(tv) {
 async function handleNavClick(text) {
   text = (text || "").trim().toLowerCase();
   if (text === "home") {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const hero = document.getElementById("hero") || heroBg || document.body;
+    scrollToEl(hero, 24);
     return;
   }
   if (text === "movies") {
-    window.scrollTo({ top: 600, behavior: "smooth" });
+    const moviesSection = document.getElementById("searchResults") || document.querySelector(".search-results") || searchResults;
+    scrollToEl(moviesSection, 80);
     return;
   }
   if (text === "top rated") {
-    window.scrollTo({ top: 1200, behavior: "smooth" });
+    const topSection = document.getElementById("topRatedRow") || topRatedRow || document.querySelector(".top-rated");
+    scrollToEl(topSection, 80);
     return;
   }
   if (text === "tv shows" || text === "tv") {
@@ -335,7 +345,8 @@ async function handleNavClick(text) {
       const mapped = await Promise.all(tvList.map(mapTvToMovieLike));
       renderGrid(mapped);
       if (mapped.length) await setHeroMovie(mapped[0]);
-      window.scrollTo({ top: 320, behavior: "smooth" });
+      const moviesSection = document.getElementById("searchResults") || searchResults;
+      scrollToEl(moviesSection, 80);
     } catch (err) {
       console.error("Error loading TV shows", err);
       alert("Could not load TV shows. Check console.");
